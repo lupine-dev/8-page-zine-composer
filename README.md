@@ -6,19 +6,6 @@ A Rust + WebAssembly library for assembling individual pages into **print-ready 
 
 When printing a booklet or zine, pages must be arranged on a large sheet in a specific order so that after folding and cutting, each page appears in the correct sequence. This library handles all the math and compositing automatically in the browser — no server required.
 
-## Assembly layouts
-
-```
-Print-ready sheet (4×2 grid, top row rotated 180°):
-┌──────┬──────┬──────┬──────┐  ┌──────────────┐  ┌──────────────┐
-│  📄1 │  📄8 │  📄7 │  📄6 │  │ Digital:     │  │ Print-ready: │
-│ (180)│(180)│(180)│(180) │  │ ┌──┬──┬──┬──┐ │  │ 1↑ 8↑ 7↑ 6↑  │
-├──────┼──────┼──────┼──────┤  │ │ 1│ 2│ 3│ 4│ │  │ +───────────+
-│  📄2 │  📄3 │  📄4 │  📄5 │  │ ├──┼──┼──┼──┤ │  │ 2   3   4   5│
-│      │      │      │      │  │ │ 5│ 6│ 7│ 8│ │  └──────────────┘
-└──────┴──────┴──────┴──────┘  └──────────────┘
-```
-
 ## API
 
 All functions accept `&[u8]` bytes (PNG or JPEG) and return `Vec<u8>` PNG bytes. Built with [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen).
