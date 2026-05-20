@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wasm Zine Builder</title>
+</head>
+<body>
+    <h2>Digital to Print-Ready Converter</h2>
+    <input type="file" id="digitalUpload" accept="image/*" />
+    <br><br>
+    <img id="resultImage" style="max-width: 100%; border: 1px solid #ccc; display: none;" />
+
+    <script type="module">
+        // Import the initialize function and the specific bindings you need
+        import init, { digital_to_print_ready } from './pkg/zine_wasm.js';
+
+        async function run() {
+            // Wait for WebAssembly memory to be allocated and loaded
+            await init();
+
+            document.getElementById('digitalUpload').addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                try {
+                    // 1. Read the file into an ArrayBuffer
+                    const arrayBuffer = await file.arrayBuffer();
+
+                    // 2. Convert to a Uint8Array, which Wasm maps to &[u8]
+                    const imageBytes = new Uint8Array(arrayBuffer);
+
+                    // 3. Call your Rust Wasm function! This runs synchronously.
+                    const printReadyBytes = digital_to_print_ready(imageBytes);
+
+                    // 4. Convert the returned Uint8Array back into an image blob
+                    const blob = new Blob([printReadyBytes], { type: 'image/png' });
+
+                    // 5. Display the result
+                    const imgElement = document.getElementById('resultImage');
+                    imgElement.src = URL.createObjectURL(blob);
+                    imgElement.style.display = 'block';
+
+                } catch (error) {
+                    console.error("Wasm processing failed:", error);
+                }
+            });
+        }
+
+        run();
+    </script>
+</body>
+</html>
