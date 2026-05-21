@@ -1,6 +1,6 @@
 # Zine WASM
 
-A Rust + WebAssembly library for assembling individual pages into **print-ready zine layouts**. Convert between digital page sequences and the special folded-sheet format printers need.
+A Rust + WebAssembly library for assembling individual pages into **print-ready zine layouts**. Image processing is performed with `imagemagick-wasm` in the browser.
 
 ## What it does
 
@@ -8,7 +8,7 @@ When printing a booklet or zine, pages must be arranged on a large sheet in a sp
 
 ## API
 
-All functions accept `&[u8]` bytes (PNG or JPEG) and return `Vec<u8>` PNG bytes. Built with [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen).
+All functions accept `&[u8]` bytes (PNG or JPEG) and return `Vec<u8>` PNG bytes. Built with [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen), using `imagemagick-wasm` for image operations.
 
 | Function | Description |
 | --- | --- |
