@@ -3,9 +3,10 @@ import initMagick from "https://cdn.jsdelivr.net/npm/imagemagick-wasm@0.3.0/magi
 const MAGICK_WASM_URL = "https://cdn.jsdelivr.net/npm/imagemagick-wasm@0.3.0/magick.wasm";
 
 let magickPromise = null;
+let magickModule = null;
 let requestCounter = 0;
 
-function getMagickModule() {
+export function init() {
   if (!magickPromise) {
     magickPromise = initMagick({
       noInitialRun: true,
@@ -17,7 +18,10 @@ function getMagickModule() {
       },
     });
   }
-  return magickPromise;
+  return magickPromise.then((module) => {
+    magickModule = module;
+    return module;
+  });
 }
 
 function runMagick(magick, args, commandName) {
@@ -36,9 +40,9 @@ function safeUnlink(magick, path) {
 }
 
 export function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
-  const magick = globalThis.__zineMagickReady;
+  const magick = magickModule;
   if (!magick) {
-    throw new Error("ImageMagick is still loading. Await module initialization and retry.");
+    throw new Error("ImageMagick is not initialized. Call and await init() first.");
   }
 
   const id = ++requestCounter;
@@ -109,11 +113,3 @@ export function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
     safeUnlink(magick, names.out);
   }
 }
-
-getMagickModule()
-  .then((module) => {
-    globalThis.__zineMagickReady = module;
-  })
-  .catch((error) => {
-    console.error("Failed to initialize imagemagick-wasm:", error);
-  });
