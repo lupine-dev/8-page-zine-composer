@@ -4,40 +4,72 @@
     <title>Wasm Zine Builder</title>
 </head>
 <body>
-    <h2>Digital to Print-Ready Converter</h2>
-    <input type="file" id="digitalUpload" accept="image/*" />
+    <h2>Pages to Print-Ready Converter</h2>
+    <div id="fileInputs"></div>
+    <button id="processBtn">Process</button>
     <br><br>
-    <img id="resultImage" style="max-width: 100%; border: 1px solid #ccc; display: none;" />
+    <div style="max-width: 50%;">
+        <img id="resultImage" style="width: 100%; border: 1px solid #ccc; display: none;" />
+        <a id="downloadLink" style="display:none;">Download Result</a>
+    </div>
 
     <script type="module">
-        // Import the initialize function and the specific bindings you need
-        import init, { digital_to_print_ready } from './pkg/zine_wasm.js';
+        import init, { pages_to_print_ready } from './pkg/zine_wasm.js';
+
+        const pageNames = ['Front Cover', 'Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5', 'Page 6', 'Back Cover'];
 
         async function run() {
-            // Wait for WebAssembly memory to be allocated and loaded
             await init();
 
-            document.getElementById('digitalUpload').addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
+            // Create 8 file inputs
+            const container = document.getElementById('fileInputs');
+            pageNames.forEach((name, i) => {
+                const row = document.createElement('div');
+                row.textContent = name + ': ';
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.id = 'page' + i;
+                row.appendChild(input);
+                container.appendChild(row);
+                container.appendChild(document.createElement('br'));
+            });
 
+            // Read a file as Uint8Array
+            function readFile(input) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(new Uint8Array(reader.result));
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(input);
+                });
+            }
+
+            document.getElementById('processBtn').addEventListener('click', async () => {
                 try {
-                    // 1. Read the file into an ArrayBuffer
-                    const arrayBuffer = await file.arrayBuffer();
+                    const files = [];
+                    for (let i = 0; i < 8; i++) {
+                        const input = document.getElementById('page' + i);
+                        if (!input.files[0]) throw new Error('Missing file for ' + pageNames[i]);
+                        files.push(await readFile(input.files[0]));
+                    }
 
-                    // 2. Convert to a Uint8Array, which Wasm maps to &[u8]
-                    const imageBytes = new Uint8Array(arrayBuffer);
+                    const printReadyBytes = pages_to_print_ready(
+                        files[0], files[1], files[2], files[3],
+                        files[4], files[5], files[6], files[7]
+                    );
 
-                    // 3. Call your Rust Wasm function! This runs synchronously.
-                    const printReadyBytes = digital_to_print_ready(imageBytes);
-
-                    // 4. Convert the returned Uint8Array back into an image blob
                     const blob = new Blob([printReadyBytes], { type: 'image/png' });
+                    const url = URL.createObjectURL(blob);
 
-                    // 5. Display the result
-                    const imgElement = document.getElementById('resultImage');
-                    imgElement.src = URL.createObjectURL(blob);
-                    imgElement.style.display = 'block';
+                    const img = document.getElementById('resultImage');
+                    img.src = url;
+                    img.style.display = 'block';
+
+                    const dl = document.getElementById('downloadLink');
+                    dl.href = url;
+                    dl.download = 'print_ready.png';
+                    dl.style.display = 'inline';
 
                 } catch (error) {
                     console.error("Wasm processing failed:", error);
