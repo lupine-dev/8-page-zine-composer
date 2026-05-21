@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Wasm Zine Builder</title>
+    <title>Canvas Zine Builder</title>
 </head>
 <body>
     <h2>Pages to Print-Ready Converter</h2>
@@ -54,7 +54,7 @@
                         files.push(await readFile(input.files[0]));
                     }
 
-                    const printReadyBytes = pages_to_print_ready(
+                    const printReadyBytes = await pages_to_print_ready(
                         files[0], files[1], files[2], files[3],
                         files[4], files[5], files[6], files[7]
                     );
@@ -72,7 +72,7 @@
                     dl.style.display = 'inline';
 
                 } catch (error) {
-                    console.error("Wasm processing failed:", error);
+                    console.error("Canvas compositing failed:", error);
                 }
             });
         }

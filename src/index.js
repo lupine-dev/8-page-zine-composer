@@ -1,6 +1,6 @@
-import { init as initImagemagick, pagesToPrintReady } from "./imagemagick.js";
+import { init as initCanvas, pagesToPrintReady } from "./canvas.js";
 
-export default initImagemagick;
-export const init = initImagemagick;
+export default initCanvas;
+export const init = initCanvas;
 export const pages_to_print_ready = pagesToPrintReady;
 export { pagesToPrintReady };

@@ -1,7 +1,7 @@
 {
-  "name": "zine_wasm",
+  "name": "zine_canvas",
   "version": "0.1.0",
-  "description": "Pure JavaScript zine layout processing with imagemagick-wasm",
+  "description": "Pure JavaScript zine layout processing with native browser canvas APIs",
   "type": "module",
   "main": "./src/index.js",
   "exports": {

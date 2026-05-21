@@ -1,14 +1,14 @@
-# Zine WASM
+# Zine Canvas
 
-A JavaScript library for assembling individual pages into **print-ready zine layouts**. Image processing is performed with `imagemagick-wasm` in the browser.
+A JavaScript library for assembling individual pages into **print-ready zine layouts** with native browser canvas APIs.
 
 ## What it does
 
-When printing a booklet or zine, pages must be arranged on a large sheet in a specific order so that after folding and cutting, each page appears in the correct sequence. This library handles all the math and compositing automatically in the browser — no server required.
+When printing a booklet or zine, pages must be arranged on a large sheet in a specific order so that after folding and cutting, each page appears in the correct sequence. This library handles the layout and compositing directly in the browser — no server required.
 
 ## API
 
-All functions accept `Uint8Array` image bytes (PNG or JPEG) and return PNG bytes. The library runs fully in the browser and uses `imagemagick-wasm` for image operations.
+All functions accept `Uint8Array` image bytes (PNG or JPEG) and return PNG bytes. The library runs fully in the browser, exports a 300 PPI PNG, and lays pages out on a letter-sized sheet in landscape orientation (`3300 × 2550` pixels).
 
 | Function | Description |
 | --- | --- |
@@ -23,9 +23,9 @@ See `example.html` for a working demo. The pattern is simple:
 ```javascript
 import init, { pages_to_print_ready } from './src/index.js';
 
-await init(); // loads and initializes imagemagick-wasm
+await init(); // verifies the browser has the required canvas APIs
 
-const resultBytes = pages_to_print_ready(
+const resultBytes = await pages_to_print_ready(
   page1, page2, page3, page4,
   page5, page6, page7, page8
 );
