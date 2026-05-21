@@ -1,6 +1,7 @@
-import initMagick from "https://cdn.jsdelivr.net/npm/imagemagick-wasm@0.3.0/magick.js";
+import initMagick from "../lib/magick.js";
 
-const MAGICK_WASM_URL = "https://cdn.jsdelivr.net/npm/imagemagick-wasm@0.3.0/magick.wasm";
+const MAGICK_JS_URL = new URL("../lib/magick.js", import.meta.url).href;
+const MAGICK_WASM_URL = new URL("../lib/magick.wasm", import.meta.url).href;
 
 let magickPromise = null;
 let magickModule = null;
@@ -11,6 +12,9 @@ export function init() {
     magickPromise = initMagick({
       noInitialRun: true,
       locateFile(path) {
+        if (path.endsWith(".js")) {
+          return MAGICK_JS_URL;
+        }
         if (path.endsWith(".wasm")) {
           return MAGICK_WASM_URL;
         }
