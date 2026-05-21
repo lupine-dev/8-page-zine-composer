@@ -1,0 +1,10 @@
+{
+  "name": "zine_wasm",
+  "version": "0.1.0",
+  "description": "Pure JavaScript zine layout processing with imagemagick-wasm",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  }
+}
