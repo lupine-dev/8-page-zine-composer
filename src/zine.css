@@ -1,0 +1,39 @@
+/* Zine Builder custom styles */
+body {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#fileInputs {
+    margin: 0 auto 1rem;
+}
+
+#fileInputs > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#processBtn {
+    display: block;
+    margin: 0 auto 2rem;
+}
+
+#resultImage {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+#downloadLink {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+}

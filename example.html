@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Canvas Zine Builder</title>
+    <title>8-Page Zine Stitcher</title>
+    <link rel="stylesheet" href="src/pico.min.css">
+    <link rel="stylesheet" href="src/zine.css">
 </head>
 <body>
-    <h2>Pages to Print-Ready Converter</h2>
+    <h1>8-Page Zine Stitcher</h1>
+    <img src="src/zine-layout.svg" width="800" height="400">
     <div id="fileInputs"></div>
     <button id="processBtn">Process</button>
     <br><br>
-    <div style="max-width: 50%;">
-        <img id="resultImage" style="width: 100%; border: 1px solid #ccc; display: none;" />
-        <a id="downloadLink" style="display:none;">Download Result</a>
+    <div id="resultContainer">
+        <img id="resultImage" />
+        <a id="downloadLink">Download Result</a>
     </div>
 
     <script type="module">
