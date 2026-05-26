@@ -26,7 +26,8 @@ export async function init() {
 export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
   ensureBrowserSupport();
 
-  const pages = [p1, p8, p7, p6, p2, p3, p4, p5];
+  //const pages = [p1, p8, p7, p6, p2, p3, p4, p5];
+  const pages = [p5, p4, p3, p2, p6, p7, p8, p1];
   const decodedPages = await Promise.all(pages.map((page) => decodeImage(page)));
   const canvas = createCanvas(OUTPUT_WIDTH, OUTPUT_HEIGHT);
   const context = getContext(canvas);

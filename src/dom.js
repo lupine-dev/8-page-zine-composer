@@ -1,14 +1,14 @@
 import init, { pages_to_print_ready } from './index.js';
 
 const PAGE_NAMES = [
-  'Front Cover',
-  'Page 1',
+  'Front Cover (Page 1)',
   'Page 2',
   'Page 3',
   'Page 4',
   'Page 5',
   'Page 6',
-  'Back Cover',
+  'Page 7',
+  'Back Cover (Page 8)',
 ];
 
 export class UI {
