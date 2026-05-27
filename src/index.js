@@ -40,7 +40,7 @@ export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
   ensureBrowserSupport();
 
   const pages = [p5, p4, p3, p2, p6, p7, p8, p1];
-  const decodedPages = await Promise.all(pages.map((page) => decodeImage(page)));
+  const decodedPages = await Promise.all(pages.map((page) => page ? decodeImage(page) : Promise.resolve(null)));
   const canvas = createCanvas(OUTPUT_WIDTH, OUTPUT_HEIGHT);
   const context = getContext(canvas);
 
@@ -51,11 +51,13 @@ export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
 
   try {
     decodedPages.forEach((image, index) => {
-      drawPage(context, image, LAYOUT[index]);
+      if (image !== null) {
+        drawPage(context, image, LAYOUT[index]);
+      }
     });
   } finally {
     decodedPages.forEach((image) => {
-      if (typeof image.close === "function") {
+      if (image && typeof image.close === "function") {
         image.close();
       }
     });
@@ -191,7 +193,8 @@ export class UI {
         for (let i = 0; i < 8; i++) {
           const input = inputs[i];
           if (!input.files[0]) {
-            throw new Error('Missing file for ' + PAGE_NAMES[i]);
+            files.push(null);
+            continue;
           }
           files.push(await this.readFile(input.files[0]));
         }
@@ -216,7 +219,9 @@ export class UI {
       } catch (error) {
         console.error('Processing failed:', error);
       } finally {
-        btn.textContent = 'Done';
+        btn.disabled = false;
+        btn.classList.add("outline");
+        btn.textContent = 'Make Zine! (Rebuild)';
       }
     });
   }

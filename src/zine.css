@@ -13,32 +13,20 @@ section {
     margin: 2rem 0;
 }
 
-#fileInputs {
-    margin: 0 auto 1rem;
-}
-
-#fileInputs > div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-#processBtn {
-    display: block;
-    margin: 0 auto 2rem;
+.buttonWrap {
+    text-align: center;
 }
 
 #resultImage {
     display: block;
     margin: 0 auto;
     margin-bottom: 2rem;
-    max-width: 100%;
+    max-width: 400px;
     height: auto;
 }
 
 #downloadLink {
     display: none;
-    text-align: center;
     margin-top: 0.5rem;
 }
 
