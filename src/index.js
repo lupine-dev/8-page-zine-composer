@@ -182,7 +182,10 @@ export class UI {
 
   setupProcessButton() {
     document.getElementById('processBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('processBtn');
       try {
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
         const files = [];
         const inputs = [...document.querySelectorAll("#fileInputs input")];
         for (let i = 0; i < 8; i++) {
@@ -212,6 +215,8 @@ export class UI {
 
       } catch (error) {
         console.error('Processing failed:', error);
+      } finally {
+        btn.textContent = 'Done';
       }
     });
   }
