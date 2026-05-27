@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>8-Page Zine Stitcher</title>
+    <title>8-Page Zine Composer</title>
     <link rel="stylesheet" href="src/pico.min.css">
     <link rel="stylesheet" href="src/zine.css">
+    <link href="favicon.ico" rel="icon" type="image/x-icon">
 </head>
 <body>
-    <h1>8-Page Zine Stitcher</h1>
-    <img src="src/zine-layout.svg" width="800" height="400">
-    <div id="fileInputs">
+    <h1>8-Page Zine Composer</h1>
+    <section>
+        <img src="src/zine-layout.svg" width="800" height="400">
+    </section>
+    <section>
+        <h2>Usage</h2>
+        <ol>
+            <li>Prepare an image of each page of your zine (photos, digital arts, etc.). They can be files on your computer or photos on your phone's photos app.</li>
+            <li>Load each of your images using the "browse" buttons below.</li>
+            <li>Click <strong>"Make Zine!"</strong>.</li>
+            <li>Click <strong>"Download Result"</strong>. Save the image.</li>
+            <li>Print it out on standard size printer paper.</li>
+            <li>Cut and fold (tutorials available <a href="https://www.youtube.com/results?search_query=how+to+fold+an+8+page+zine">on youtube!</a>)</li>
+            <li>You got a zine! :3</li>
+        </ol>
+    </section>
+    <section id="fileInputs">
+        <h2>Load Images</h2>
         <div>Page 1 (Front Cover):</div><input type="file" accept="image/*">
         <div>Page 2:</div><input type="file" accept="image/*">
         <div>Page 3:</div><input type="file" accept="image/*">
@@ -17,13 +33,15 @@
         <div>Page 6:</div><input type="file" accept="image/*">
         <div>Page 7:</div><input type="file" accept="image/*">
         <div>Page 8 (Back Cover):</div><input type="file" accept="image/*">
-    </div>
-    <button id="processBtn">Process</button>
-    <br><br>
-    <div id="resultContainer">
+        <button id="processBtn">Make Zine!</button>
+    </section>
+    <section id="resultContainer">
         <img id="resultImage" />
         <a role="button" id="downloadLink">Download Result</a>
     </div>
+
+
+    <footer>Made with &lt;3 by <a href="https://lupine.dev/">Wolfy</a>. Pair programmed with Qwen 3.6/Gemini 3.1.</footer>
 
     <script type="module" src="src/index.js"></script>
 </body>
