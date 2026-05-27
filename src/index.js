@@ -184,7 +184,7 @@ export class UI {
     document.getElementById('processBtn').addEventListener('click', async () => {
       try {
         const files = [];
-        const inputs = document.querySelectorAll("#fileInputs input").toArray();
+        const inputs = [...document.querySelectorAll("#fileInputs input")];
         for (let i = 0; i < 8; i++) {
           const input = inputs[i];
           if (!input.files[0]) {
