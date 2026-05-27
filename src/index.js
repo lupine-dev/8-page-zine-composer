@@ -7,6 +7,8 @@ const COLUMN_COUNT = 4;
 const ROW_COUNT = 2;
 const SLOT_WIDTH = OUTPUT_WIDTH / COLUMN_COUNT;
 const SLOT_HEIGHT = OUTPUT_HEIGHT / ROW_COUNT;
+const SCALE_MODE_SHRINK = "shrink";
+const SCALE_MODE_CROP = "crop";
 
 const LAYOUT = [
   { x: 0 * SLOT_WIDTH, y: 0 * SLOT_HEIGHT, rotate: true },
@@ -36,8 +38,9 @@ export async function init() {
   ensureBrowserSupport();
 }
 
-export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
+export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8, options = {}) {
   ensureBrowserSupport();
+  const scaleMode = normalizeScaleMode(options.scaleMode);
 
   const pages = [p5, p4, p3, p2, p6, p7, p8, p1];
   const decodedPages = await Promise.all(pages.map((page) => page ? decodeImage(page) : Promise.resolve(null)));
@@ -52,7 +55,7 @@ export async function pagesToPrintReady(p1, p2, p3, p4, p5, p6, p7, p8) {
   try {
     decodedPages.forEach((image, index) => {
       if (image !== null) {
-        drawPage(context, image, LAYOUT[index]);
+        drawPage(context, image, LAYOUT[index], scaleMode);
       }
     });
   } finally {
@@ -122,8 +125,22 @@ function decodeImageElement(objectUrl) {
   });
 }
 
-function drawPage(context, image, slot) {
-  const scale = Math.min(SLOT_WIDTH / image.width, SLOT_HEIGHT / image.height);
+function normalizeScaleMode(scaleMode) {
+  if (scaleMode === undefined) {
+    return SCALE_MODE_SHRINK;
+  }
+
+  if (scaleMode === SCALE_MODE_SHRINK || scaleMode === SCALE_MODE_CROP) {
+    return scaleMode;
+  }
+
+  throw new Error(`Unsupported scale mode: ${scaleMode}`);
+}
+
+function drawPage(context, image, slot, scaleMode) {
+  const scale = scaleMode === SCALE_MODE_CROP
+    ? Math.max(SLOT_WIDTH / image.width, SLOT_HEIGHT / image.height)
+    : Math.min(SLOT_WIDTH / image.width, SLOT_HEIGHT / image.height);
   const drawWidth = image.width * scale;
   const drawHeight = image.height * scale;
   const centerX = slot.x + SLOT_WIDTH / 2;
@@ -131,6 +148,9 @@ function drawPage(context, image, slot) {
 
   context.save();
   context.translate(centerX, centerY);
+  context.beginPath();
+  context.rect(-SLOT_WIDTH / 2, -SLOT_HEIGHT / 2, SLOT_WIDTH, SLOT_HEIGHT);
+  context.clip();
 
   if (slot.rotate) {
     context.rotate(Math.PI);
@@ -188,6 +208,7 @@ export class UI {
       try {
         btn.disabled = true;
         btn.textContent = 'Processing...';
+        const scaleMode = this.getSelectedScaleMode();
         const files = [];
         const inputs = [...document.querySelectorAll("#fileInputs input")];
         for (let i = 0; i < 8; i++) {
@@ -201,7 +222,8 @@ export class UI {
 
         const printReadyBytes = await pagesToPrintReady(
           files[0], files[1], files[2], files[3],
-          files[4], files[5], files[6], files[7]
+          files[4], files[5], files[6], files[7],
+          { scaleMode }
         );
 
         const blob = new Blob([printReadyBytes], { type: 'image/png' });
@@ -224,6 +246,16 @@ export class UI {
         btn.textContent = 'Make Zine! (Rebuild)';
       }
     });
+  }
+
+  getSelectedScaleMode() {
+    const selectedInput = document.querySelector('input[name="cropBehavior"]:checked');
+
+    if (!(selectedInput instanceof HTMLInputElement)) {
+      throw new Error('Select a scale option before building the zine.');
+    }
+
+    return normalizeScaleMode(selectedInput.value);
   }
 }
 
