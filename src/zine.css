@@ -9,6 +9,10 @@ h1 {
     text-align: center;
 }
 
+h3 {
+    font-size: 1.25rem;
+}
+
 section {
     margin: 2rem 0;
 }
@@ -28,6 +32,10 @@ section {
 #downloadLink {
     display: none;
     margin-top: 0.5rem;
+}
+
+.options p {
+    opacity: 0.5;
 }
 
 footer {

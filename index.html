@@ -34,6 +34,21 @@
         <div>Page 6:</div><input type="file" accept="image/*">
         <div>Page 7:</div><input type="file" accept="image/*">
         <div>Page 8 (Back Cover):</div><input type="file" accept="image/*">
+    </section>
+    <section class="options">
+        <h3>Scale Option</h3>
+        <div>
+            <input type="radio" id="shrink" name="cropBehavior" value="shrink" checked />
+            <label for="shrink">Print entire image (Recommended)</label>
+            <p>Auto-scale your images so that they fit in the center of each zine page.</p>
+        </div>
+        <div>
+            <input type="radio" id="crop" name="cropBehavior" value="crop" />
+            <label for="shrink">Stretch to fill</label>
+            <p>Stretch your images to fill the entire zine page. Part might get cropped off!</p>
+        </div>
+    </section>
+    <section>
         <div class="buttonWrap"><button id="processBtn">Make Zine!</button></div>
     </section>
     <section id="resultContainer">
