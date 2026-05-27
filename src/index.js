@@ -168,25 +168,7 @@ export class UI {
 
   async init() {
     await init();
-    this.createFileInputs();
     this.setupProcessButton();
-  }
-
-  createFileInputs() {
-    const container = document.getElementById('fileInputs');
-    PAGE_NAMES.forEach((name, i) => {
-      const row = document.createElement('div');
-      row.textContent = name + ': ';
-
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.id = 'page' + i;
-      row.appendChild(input);
-
-      container.appendChild(row);
-      container.appendChild(document.createElement('br'));
-    });
   }
 
   readFile(input) {
@@ -202,8 +184,9 @@ export class UI {
     document.getElementById('processBtn').addEventListener('click', async () => {
       try {
         const files = [];
+        const inputs = document.querySelectorAll("#fileInputs input").toArray();
         for (let i = 0; i < 8; i++) {
-          const input = document.getElementById('page' + i);
+          const input = inputs[i];
           if (!input.files[0]) {
             throw new Error('Missing file for ' + PAGE_NAMES[i]);
           }
