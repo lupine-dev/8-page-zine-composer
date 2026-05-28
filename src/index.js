@@ -229,6 +229,9 @@ export class UI {
         const blob = new Blob([printReadyBytes], { type: 'image/png' });
         const url = URL.createObjectURL(blob);
 
+        const resultContainer = document.getElementById('resultContainer');
+        resultContainer.style.display = "block";
+
         const img = document.getElementById('resultImage');
         img.src = url;
         img.style.display = 'block';
@@ -236,7 +239,6 @@ export class UI {
         const dl = document.getElementById('downloadLink');
         dl.href = url;
         dl.download = 'print_ready.png';
-        dl.style.display = 'inline';
 
       } catch (error) {
         console.error('Processing failed:', error);

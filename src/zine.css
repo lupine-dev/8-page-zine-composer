@@ -30,7 +30,17 @@ section {
 }
 
 #downloadLink {
+    margin-top: 0.5rem;
+}
+
+#resultContainer {
     display: none;
+}
+
+#resultContainer p {
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.5;
     margin-top: 0.5rem;
 }
 
